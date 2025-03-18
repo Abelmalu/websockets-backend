@@ -30,7 +30,8 @@ class GotMessage
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat'),
+            new Channel('chat'
+            ),
         ];
     }
 }

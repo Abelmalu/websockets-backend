@@ -7,7 +7,7 @@ Route::get('/test', function () {
   return 'Event fired';
 });
 
-Route::get('',function(){
+Route::get('/',function(){
     return 'what up my brother';
 
 });
