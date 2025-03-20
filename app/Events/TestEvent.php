@@ -13,6 +13,8 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 class TestEvent implements ShouldBroadcastNow
 {
+
+  
  
 	public function broadcastOn()
 	{

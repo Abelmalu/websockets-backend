@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GotMessage;
+use App\Events\TestEvent;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\Validator;
@@ -34,7 +36,9 @@ class MessageController extends Controller
             $message->text = $request->get('text');
             $result = $message->save();
             if ($result) {
+                      event(new \App\Events\GotMessage($message));
                 return ['success' => "message successfully saved"];
+          
             } else {
 
                 return ['error' => "not saved to the db"];
