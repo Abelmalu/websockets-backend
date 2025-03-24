@@ -12,6 +12,8 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+ 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -48,6 +50,6 @@ class User extends Authenticatable
 
     public function messages(){
 
-        return $this->hasMany(messages::class);
+        return $this->hasMany(Message::class);
     }
 }
