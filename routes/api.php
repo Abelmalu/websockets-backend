@@ -9,5 +9,7 @@ use App\Http\Controllers\MessageController;
 
 Route::get('/chatmessages',[MessageController::class,'messages']);
 Route::post('/register',[AuthController::class,'register']);
+
 Route::post('/login',[AuthController::class,'login']);
+
 Route::post('/message',[MessageController::class,'createMessage']);
