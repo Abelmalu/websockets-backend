@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,17 @@ Route::get('/create', function (Request $request) {
 
   return view('create');
 });
+Route::get('/home', function (Request $request) {
 
 
-Route::get('/login', function (Request $request) {
+  return view('home');
+})->name('home');
+
+
+Route::get('/loginvieew', function (Request $request) {
 
   return view('login.blade.php');
-})->name('login');
+})->name('loginview');
+
+Route::post('/login',[LoginController::class,'login'] )->name('login');
+

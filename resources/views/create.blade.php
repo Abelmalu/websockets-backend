@@ -7,9 +7,14 @@
 </head>
 <body>
 
-    <form action="">
+    <form action="{{ route('login') }}" method="post">
+        @csrf
 
-        <input type="text" placeholder="enter your name">
+        <input type="text" placeholder="email" name="email" >
+        <input type="text" placeholder="password" name = "password">
+        <input type="submit" placeholder="Login">
+
+        <div>{{ $errors }}</div>
     </form>
     
 </body>
