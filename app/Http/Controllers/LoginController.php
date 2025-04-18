@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
     public function login(Request $request){
+        Log::info('user tried to log in');
 
         $credentials = $request->validate([
 
@@ -15,6 +17,8 @@ class LoginController extends Controller
             'password' =>'required|min:8|string'
 
         ]);
+
+      
 
         if(Auth::attempt($credentials)){
 
