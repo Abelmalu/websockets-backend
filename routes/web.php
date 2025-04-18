@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Role;
 use ILluminate\support\Facades\Gate;
+use App\Http\Controllers\PostController;
 
 Route::get('/test', function () {
   event(new \App\Events\TestEvent());
@@ -53,3 +54,8 @@ Route::get('/register', function (Request $request) {
 
   return view('register');
 })->name('registerview');
+
+
+//post routes
+
+Route::get('/posts',[PostController::class,'index'])->name('index.post');
