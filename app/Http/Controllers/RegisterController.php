@@ -17,9 +17,15 @@ class RegisterController extends Controller
 
 
 
+
         ]);
 
-        if(User::create($credentials)){
+        $user = User::create($credentials);
+        $user->role = 1;
+
+       $user = $user->save();
+
+        if($user){
 
             return redirect('create');
 

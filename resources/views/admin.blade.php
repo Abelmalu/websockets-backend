@@ -6,7 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Welcome to the user Dashboard</h1>
-
+    <h1>Welcome to the Admin Home</h1>
 </body>
 </html>
