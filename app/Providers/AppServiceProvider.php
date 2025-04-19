@@ -6,6 +6,7 @@ use Illuminate\support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Model;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +30,7 @@ class AppServiceProvider extends ServiceProvider
 
 
         });
+
+        Model::automaticallyEagerLoadRelationships();
     }
 }

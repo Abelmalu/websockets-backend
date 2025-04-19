@@ -11,7 +11,7 @@ class PostController extends Controller
 
        // $posts = Post::all();  // easy loading
 
-        $posts = Post::with('user')->get();
+        $posts = Post::all();
 
         return view('post',['posts'=> $posts]);
 
