@@ -5,8 +5,36 @@ use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Role;
-use ILluminate\support\Facades\Gate;
+use Illuminate\support\Facades\Gate;
 use App\Http\Controllers\PostController;
+use Illuminate\support\Facades\Auth;
+
+
+//email verification related route
+
+
+//the link to verify the email
+Route::get('/email/verify', function () {
+  return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+  $request->fulfill();
+
+  return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+
+
+
+Route::post('/email/verification-notification', function (Request $request) {
+  $request->user()->sendEmailVerificationNotification();
+
+  return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('/test', function () {
   event(new \App\Events\TestEvent());
@@ -21,7 +49,7 @@ Route::get('/create', function (Request $request) {
 
 
   return view('create');
-})->name('create');
+})->name('create')->middleware(['auth', 'verified']);
 Route::get('/user_home', function (Request $request) {
 
 
@@ -59,3 +87,5 @@ Route::get('/register', function (Request $request) {
 //post routes
 
 Route::get('/posts',[PostController::class,'index'])->name('index.post');
+
+

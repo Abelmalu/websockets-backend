@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -24,6 +25,7 @@ class RegisterController extends Controller
         $user->role = 1;
 
        $user = $user->save();
+       event(new Registered($user));
 
         if($user){
 

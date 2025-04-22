@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
+
+class AuthController extends Controller 
 {
 
     public function Register(Request $request)
