@@ -24,10 +24,11 @@ class RegisterController extends Controller
         $user = User::create($credentials);
         $user->role = 1;
 
-       $user = $user->save();
-       event(new Registered($user));
+       $saved = $user->save();
+     
 
-        if($user){
+        if($saved){
+            event(new Registered($user));
 
             return redirect('create');
 

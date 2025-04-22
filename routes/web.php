@@ -8,6 +8,7 @@ use App\Http\Middleware\Role;
 use Illuminate\support\Facades\Gate;
 use App\Http\Controllers\PostController;
 use Illuminate\support\Facades\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 //email verification related route
@@ -19,12 +20,10 @@ Route::get('/email/verify', function () {
 })->middleware('auth')->name('verification.notice');
 
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
   $request->fulfill();
 
-  return redirect('/home');
+  return redirect('/create');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 
@@ -49,7 +48,10 @@ Route::get('/create', function (Request $request) {
 
 
   return view('create');
-})->name('create')->middleware(['auth', 'verified']);
+})->name('create')->middleware('verified');
+
+
+
 Route::get('/user_home', function (Request $request) {
 
 
