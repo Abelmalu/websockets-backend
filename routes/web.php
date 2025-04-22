@@ -16,14 +16,14 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 //the link to verify the email
 Route::get('/email/verify', function () {
-  return view('auth.verify-email');
+  return view('verify-email');
 })->middleware('auth')->name('verification.notice');
 
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
   $request->fulfill();
 
-  return redirect('/create');
+  return redirect('/');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 
@@ -48,7 +48,7 @@ Route::get('/create', function (Request $request) {
 
 
   return view('create');
-})->name('create')->middleware('verified');
+})->name('login');
 
 
 
@@ -78,7 +78,7 @@ Route::get('/loginvieew', function (Request $request) {
   return view('login.blade.php');
 })->name('loginview');
 
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
 Route::get('/register', function (Request $request) {
 
