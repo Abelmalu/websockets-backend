@@ -41,7 +41,7 @@ Route::get('/test', function () {
 });
 
 Route::get('/', function () {
-  return 'what up my brother';
+  return view('home');
 });
 
 Route::get('/create', function (Request $request) {
