@@ -41,7 +41,7 @@ Route::get('/test', function () {
 });
 
 Route::get('/', function () {
-  return view('home');
+  return view('dashboard.index');
 });
 
 Route::get('/create', function (Request $request) {
