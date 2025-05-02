@@ -6,64 +6,71 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 
 class AuthController extends Controller 
 {
 
-    public function Register(Request $request)
+
+    public function register(Request $request)
     {
+        try {
+            $validator = Validator::make($request->all(), [
+                "username" => 'required|max:255|unique:users,username|string',
+                "name"     => 'required|max:255|string',
+                'identifier' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $isEmail = filter_var($value, FILTER_VALIDATE_EMAIL);
+                        $isPhone = preg_match('/^\+?[0-9\s\-\(\)]{7,}$/', $value);
 
-        $validator =  Validator::make($request->all(), [
-            "username" => 'required|max:255|unique:users,username|string',
-            "name" => 'required|max:255|string|required',
-            'identifier' => 'required|unique:users,email|unique:users,phone',
-            "password" => 'required|confirmed',
+                        if (!$isEmail && !$isPhone) {
+                            return $fail('The identifier must be a valid email or phone number.');
+                        }
+                    },
+                ],
+                "password" => 'required|confirmed|min:8',
+            ]);
 
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
 
+            $data = $validator->validated();
+            $isEmail = filter_var($data['identifier'], FILTER_VALIDATE_EMAIL);
 
-        ]);
-        // Determine if the identifier is an email or phone number
+            $exists = DB::table('users')
+              
+                ->where($isEmail ? 'email' : 'phone', $data['identifier'])
+                ->exists();
 
+            if ($exists) {
+                return response()->json([
+                    'errors' => [
+                        'identifier' => ['The ' . ($isEmail ? 'email' : 'phone') . ' has already been taken.']
+                    ]
+                ], 422);
+            }
 
-        $data = [
-            'name' => $request->name,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-        ];
+            $user = User::create([
+                'username' => $data['username'],
+                'name'     => $data['name'],
+                'email'    => $isEmail ? $data['identifier'] : null,
+                'phone'    => !$isEmail ? $data['identifier'] : null,
+                'password' => Hash::make($data['password']),
+            ]);
 
-        if (filter_var($request->identifier, FILTER_VALIDATE_EMAIL)) {
-            $data['email'] = $request->identifier;
-        } else {
-            $data['phone'] = $request->identifier;
-        }
-
-        if ($validator->fails()) {
-
-            return $validator->errors();
-        } else {
-
-
-
-            $user = new User($data);
-
-
-            $user->save();
-
-
-
-            $token = $user->createToken($request->name);
-
-
-
-            return [
-                'user' => $user->name,
-                'token' => $token->plainTextToken
-
-
-            ];
+            return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Server Error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
+
 
 
     public function login(Request $request)
