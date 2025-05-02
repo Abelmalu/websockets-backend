@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Rules\EmailOrPhone;
 
 
 class AuthController extends Controller 
@@ -22,14 +23,7 @@ class AuthController extends Controller
                 "name"     => 'required|max:255|string',
                 'identifier' => [
                     'required',
-                    function ($attribute, $value, $fail) {
-                        $isEmail = filter_var($value, FILTER_VALIDATE_EMAIL);
-                        $isPhone = preg_match('/^\+?[0-9\s\-\(\)]{7,}$/', $value);
-
-                        if (!$isEmail && !$isPhone) {
-                            return $fail('The identifier must be a valid email or phone number.');
-                        }
-                    },
+                    new EmailOrPhone
                 ],
                 "password" => 'required|confirmed|min:8',
             ]);
